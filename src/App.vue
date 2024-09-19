@@ -11,19 +11,19 @@
     <v-main>
       <v-container>
         <v-row>
-          <v-col cols="6">
+          <v-col cols="12" sm="6" md="6">
             <WeatherSearch @search="fetchCityWeather" />
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6" md="6">
             <FavoriteCities />
           </v-col>
         </v-row>
 
         <v-row>
-          <v-col cols="6">
+          <v-col cols="12" sm="6" md="6">
             <WeatherForecast :city="city" />
           </v-col>
-          <v-col cols="6">
+          <v-col cols="12" sm="6" md="6">
             <TemperatureChart :city="city" />
           </v-col>
         </v-row>
