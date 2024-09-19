@@ -1,15 +1,18 @@
 <template>
-  <v-card v-if="weather.forecast" class="mt-4">
-    <v-card-title>5-Day Forecast for {{ city }}</v-card-title>
+  <v-card v-if="weather.forecast" class="mx-auto my-4 py-3" max-width="1200">
+    <v-card-title class="text-center headline font-weight-bold">5-Day Forecast for {{ city }}</v-card-title>
     <v-card-text>
-      <v-row>
-        <v-col v-for="(day, index) in forecastData" :key="index" cols="12" sm="6" md="6">
-          <v-card outlined>
-            <v-card-title class="text-center">{{ formatDate(day.dt) }}</v-card-title>
+      <v-row dense>
+        <!-- Loop through forecast data -->
+        <v-col v-for="(day, index) in forecastData" :key="index" cols="12" sm="12" md="6">
+          <v-card outlined class="elevation-2 pa-3">
+            <v-card-title class="text-center subtitle-1 font-weight-medium">
+              {{ formatDate(day.dt) }}
+            </v-card-title>
             <v-card-text class="text-center">
-              <v-icon size="large">{{ getWeatherIcon(day.weather[0].icon) }}</v-icon>
-              <div class="text-h5">{{ Math.round(day.main.temp) }}°C</div>
-              <div>{{ day.weather[0].description }}</div>
+              <v-icon size="large" color="blue darken-2">{{ getWeatherIcon(day.weather[0].icon) }}</v-icon>
+              <div class="text-h5 font-weight-bold my-2">{{ Math.round(day.main.temp) }}°C</div>
+              <div class="text-caption text-uppercase">{{ day.weather[0].description }}</div>
             </v-card-text>
           </v-card>
         </v-col>
