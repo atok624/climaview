@@ -11,9 +11,9 @@
         ></v-text-field>
       </v-form>
 
-      <v-alert v-if="error" type="error" class="mt-4">{{ error }}</v-alert>
+      <v-alert v-if="error" type="error" class="mt-1">{{ error }}</v-alert>
 
-      <v-card v-if="currentWeather" class="mt-4">
+      <v-card v-if="currentWeather">
         <v-card-title>
           {{ currentWeather.name }}
           <img
