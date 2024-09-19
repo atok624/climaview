@@ -22,16 +22,26 @@ import { useWeather } from '../composables/useWeather';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale);
 
-const props = defineProps(['city']); // Accept city as a prop
+// Define the default city
+const DEFAULT_CITY = 'London';
+
+// Accept city as a prop and set default value
+const props = defineProps({
+  city: {
+    type: String,
+    default: DEFAULT_CITY
+  }
+});
 const weather = useWeather();
 const loading = ref(false);
 const error = ref(null);
 
+// Fetch weather data whenever the city changes
 watch(() => props.city, (newCity) => {
   if (newCity) {
-    fetchWeatherForCity(newCity); // Fetch weather when city changes
+    fetchWeatherForCity(newCity);
   }
-});
+}, { immediate: true }); // Trigger watch immediately for initial fetch
 
 const fetchWeatherForCity = (city) => {
   if (city.trim()) {
@@ -84,8 +94,7 @@ const chartOptions = computed(() => {
 });
 
 onMounted(() => {
-  if (props.city) {
-    fetchWeatherForCity(props.city); // Fetch data for initial city
-  }
+  // Fetch weather for the initial city
+  fetchWeatherForCity(props.city);
 });
 </script>

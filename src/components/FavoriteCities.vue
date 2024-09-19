@@ -6,6 +6,7 @@
         <v-text-field v-model="newCity" label="Add a new favorite city" append-icon="mdi-plus"
           @click:append="addNewCity"></v-text-field>
       </v-form>
+      <v-alert v-if="error" type="error" class="mt-1">{{ error }}</v-alert>
       <v-list>
         <v-list-item v-for="city in favoriteCities" :key="city" @click="viewWeather(city)"
           :class="{ 'selected-city': selectedCity === city }">
@@ -46,26 +47,49 @@ const viewWeather = async (city) => {
   selectedCity.value = city;
   try {
     await fetchWeather(city);
+    
     // Ensure that currentWeather is updated before checking
     if (currentWeather.value && currentWeather.value.name === city) {
       selectedCity.value = city;
     } else {
       // Handle case where currentWeather was not set properly
-      console.error('Weather data for the selected city is not available.');
-      selectedCity.value = null;
+      throw new Error('Weather data for the selected city is not available.');
     }
   } catch (err) {
-    console.error('Error fetching weather data:', err);
+    console.error('Error fetching weather data:', err.message || err);
     selectedCity.value = null;
+    currentWeather.value = null;
+    alert(`Error: ${err.message}. Please check the city name or try again later.`);
   }
 };
 
-const addNewCity = () => {
-  if (newCity.value.trim()) {
-    addCity(newCity.value.trim());
-    newCity.value = '';
+
+const addNewCity = async () => {
+  const cityName = newCity.value.trim();
+  if (cityName) {
+    try {
+      // Attempt to fetch weather data for the new city to validate it
+      await fetchWeather(cityName);
+      
+      // If the fetch is successful, add the city to the favorites
+      if (currentWeather.value && currentWeather.value.name === cityName) {
+        addCity(cityName);
+        newCity.value = '';
+      } else {
+        // Handle case where weather data is not set properly
+        alert('Invalid city name or weather data not available.');
+      }
+    } catch (err) {
+      // Handle error if fetching weather data fails
+      console.error('Error validating city name:', err.message || err);
+      alert(`Invalid city name or weather data not available. Please check the city name.`);
+    }
+  } else {
+    // Alert if the city name is empty
+    alert('City name cannot be empty.');
   }
 };
+
 
 const removeNewCity = (city) => {
   removeCity(city);
